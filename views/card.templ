@@ -1,0 +1,29 @@
+package views
+
+import "github.com/michaelcosj/pluto-reader/models"
+
+templ CardList(feed *models.Feed) {
+	for _, v := range feed.Items {
+		if v != nil {
+			@Card(v.Title, v.Summary)
+		}
+	}
+}
+
+templ Card(title string, subtitle string) {
+	<div class="card block">
+		<div class="card-content">
+			<p class="title is-5">
+				{ title }
+			</p>
+			<p class="subtitle is-6">
+				{ subtitle }
+			</p>
+		</div>
+		<footer class="card-footer">
+			<a href="#" class="card-footer-item">Bookmark</a>
+			<a href="#" class="card-footer-item">Add To Folder</a>
+			<a href="#" class="card-footer-item">Mark As Read</a>
+		</footer>
+	</div>
+}

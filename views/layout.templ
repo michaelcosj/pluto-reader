@@ -1,14 +1,27 @@
 package views
 
+templ header() {
+	<nav class="navbar is-dark">
+		<div class="navbar-brand">
+			<a class="navbar-item" href="/">
+				<h1>Pluto Reader</h1>
+			</a>
+		</div>
+	</nav>
+}
+
 templ layout() {
-    <!DOCTYPE html>
+	<!DOCTYPE html>
 	<html lang="en">
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<title>Pluto Reader!</title>
+			<link rel="stylesheet" href="/css/bulma.min.css"/>
+			<script src="/js/htmx.min.js"></script>
 		</head>
 		<body>
+			@header()
 			{ children... }
 		</body>
 	</html>

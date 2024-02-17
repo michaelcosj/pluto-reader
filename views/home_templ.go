@@ -10,7 +10,7 @@ import "context"
 import "io"
 import "bytes"
 
-func Hello(name string) templ.Component {
+func Home(name string) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -29,20 +29,7 @@ func Hello(name string) templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div>Hello There, ")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(name)
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/hello.templ`, Line: 4, Col: 26}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"section\"><div class=\"container is-5\"><div class=\"columns\"><div class=\"column\"><h1 class=\"title\">Input an atom link</h1><form hx-post=\"/getfeed\" hx-target=\"[hx-feed-container]\" hx-swap=\"innerHTML\"><div class=\"field has-addons\"><div class=\"control\"><input class=\"input is-primary\" type=\"text\" name=\"link\" placeholder=\"Atom feed link\"></div><div class=\"control\"><button class=\"button is-primary\">Fetch</button></div></div></form></div><div class=\"column\" style=\"overflow:auto; height: 100vh;\" hx-feed-container></div></div></div></section>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
