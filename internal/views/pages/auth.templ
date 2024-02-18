@@ -1,0 +1,13 @@
+package pages
+
+import "github.com/michaelcosj/pluto-reader/internal/views/layouts"
+
+templ Auth() {
+	@layouts.Page("Sign In") {
+		<section class="section">
+			<div class="level">
+				<a href="/auth/signin" class="button is-outlined is-primary">Sign In with Google</a>
+			</div>
+		</section>
+	}
+}
