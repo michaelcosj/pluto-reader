@@ -1,8 +1,8 @@
-package router
+package main
 
 import (
 	"context"
-	"fmt"
+	"log"
 	"net/http"
 	"os"
 
@@ -11,29 +11,37 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/jackc/pgx/v5"
-	"github.com/michaelcosj/pluto-reader/internal/handlers"
-	"github.com/michaelcosj/pluto-reader/internal/repository"
-	"github.com/michaelcosj/pluto-reader/internal/services"
+	"github.com/joho/godotenv"
+	"github.com/michaelcosj/pluto-reader/assets"
+	"github.com/michaelcosj/pluto-reader/db/repository"
+	"github.com/michaelcosj/pluto-reader/handlers"
+	"github.com/michaelcosj/pluto-reader/services"
 )
 
-func Run() error {
+func init() {
+	if err := godotenv.Load(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
     r.Use(middleware.CleanPath)
 
+    sessionManager := scs.New()
+    sessionManager.Store = memstore.New()
+
     ctx := context.Background()
     dbConn, err := pgx.Connect(ctx, os.Getenv("PG_DSN"))
     if err != nil {
-        return fmt.Errorf("error connecting to database: %w", err)
+        log.Fatalf("error connecting to database: %w", err)
     }
     defer dbConn.Close(ctx)
 
     queries := repository.New(dbConn)
-
-    sessionManager := scs.New()
-    sessionManager.Store = memstore.New()
-
 	googleAuthService := services.GoogleOauth(queries)
+
 	googleAuthHandler := handlers.GoogleOauth(googleAuthService, sessionManager)
 
 	r.Group(func(r chi.Router) {
@@ -45,8 +53,7 @@ func Run() error {
 	r.Get("/", handlers.ShowIndexPage)
 	r.Post("/getfeed", handlers.GetFeed)
 
-	fs := http.FileServer(http.Dir("./assets/dist/"))
-	r.Handle("/dist/*", http.StripPrefix("/dist", fs))
+	r.Handle("/dist/*", assets.Mount("/dist"))
 
-	return http.ListenAndServe(":3000", sessionManager.LoadAndSave(r))
+	http.ListenAndServe(":3000", sessionManager.LoadAndSave(r))
 }

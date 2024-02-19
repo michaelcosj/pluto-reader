@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/michaelcosj/pluto-reader/internal/services"
-	"github.com/michaelcosj/pluto-reader/internal/views/pages"
+	"github.com/michaelcosj/pluto-reader/services"
+	"github.com/michaelcosj/pluto-reader/views/pages"
 )
 
 type GoogleOauthHandler struct {

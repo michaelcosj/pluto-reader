@@ -5,9 +5,9 @@ tmp_dir = "tmp"
 [build]
   args_bin = []
   bin = "./tmp/main"
-  cmd = "tailwindcss -i ./assets/app.css -o ./assets/dist/css/style.css && sqlc generate && templ generate && go build -o ./tmp/main ."
+  cmd = "./build.sh"
   delay = 1000
-  exclude_dir = ["assets", "tmp", "testdata", "internal/repository"]
+  exclude_dir = ["assets", "tmp", "testdata", "db/repository"]
   exclude_file = []
   exclude_regex = ["_test.go", ".*_templ.go"]
   exclude_unchanged = false

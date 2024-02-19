@@ -5,10 +5,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/michaelcosj/pluto-reader/internal/parser"
-	"github.com/michaelcosj/pluto-reader/internal/utils"
-	"github.com/michaelcosj/pluto-reader/internal/views/components"
-	"github.com/michaelcosj/pluto-reader/internal/views/pages"
+	"github.com/michaelcosj/pluto-reader/parser"
+	"github.com/michaelcosj/pluto-reader/utils"
+	"github.com/michaelcosj/pluto-reader/views/components"
+	"github.com/michaelcosj/pluto-reader/views/pages"
 )
 
 func ShowIndexPage(w http.ResponseWriter, r *http.Request) {

@@ -11,7 +11,7 @@ import (
 	"os"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/michaelcosj/pluto-reader/internal/repository"
+	"github.com/michaelcosj/pluto-reader/db/repository"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 )
