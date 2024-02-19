@@ -53,7 +53,7 @@ func main() {
 	r.Get("/", handlers.ShowIndexPage)
 	r.Post("/getfeed", handlers.GetFeed)
 
-	r.Handle("/dist/*", assets.Mount("/dist"))
+	r.Handle("/dist/*", assets.Mount())
 
 	http.ListenAndServe(":3000", sessionManager.LoadAndSave(r))
 }
