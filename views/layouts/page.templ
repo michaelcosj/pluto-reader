@@ -6,29 +6,13 @@ templ Page(title string) {
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<title>{title} - Pluto Reader!</title>
-			<link rel="stylesheet" href="/dist/css/style.css"/>
+			<title>{ title } - Pluto Reader!</title>
 			<script src="/dist/js/htmx.min.js"></script>
+			<link rel="stylesheet" href="/dist/css/style.css"/>
 		</head>
-		<body>
-			<!-- Header -->
-			<nav class="h-14 px-8 bg-black flex items-center justify-between">
-				<div>
-					<a href="/">
-						<h1 class="text-xl text-white">Pluto Reader</h1>
-					</a>
-				</div>
-				<div class="flex items-center gap-5">
-					<a href="/" class="bg-green-600 text-white px-3 py-1.5 rounded-sm">
-						Add Feed
-					</a>
-					<a href="/auth/logout" class="text-white underline hover:font-bold">
-						Log out
-					</a>
-				</div>
-			</nav>
-			<!-- Header End -->
+		<body class="bg-background text-text">
 			{ children... }
 		</body>
+		<script src="/dist/js/app.js"></script>
 	</html>
 }

@@ -11,6 +11,7 @@ import "io"
 import "bytes"
 
 import "github.com/michaelcosj/pluto-reader/views/layouts"
+import "github.com/michaelcosj/pluto-reader/views/components"
 
 func Index() templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
@@ -31,7 +32,26 @@ func Index() templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"px-16 py-12\"><div class=\"grid grid-cols-2\"><div class=\"flex flex-col gap-5\"><h1 class=\"text-2xl\">Input an atom link</h1><form hx-post=\"/getfeed\" hx-target=\"[hx-feed-container]\" hx-swap=\"innerHTML\"><div class=\"flex items-center gap-2\"><div class=\"control\"><input class=\"rounded\" type=\"text\" name=\"link\" placeholder=\"Atom feed link\"></div><button class=\"bg-green-600 px-3 py-2 text-white rounded\">Fetch</button></div></form></div><div class=\"px-3\" style=\"overflow:auto; height: 100vh;\" hx-feed-container></div></div></section>")
+			templ_7745c5c3_Var3 := templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
+				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
+				if !templ_7745c5c3_IsBuffer {
+					templ_7745c5c3_Buffer = templ.GetBuffer()
+					defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
+				}
+				templ_7745c5c3_Err = components.Header().Render(ctx, templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <section class=\"px-16 py-12\"><div class=\"grid grid-cols-2\"><div class=\"flex flex-col gap-5\"><h1 class=\"text-2xl\">Input an atom link</h1><form hx-post=\"/getfeed\" hx-target=\"[hx-feed-container]\" hx-swap=\"innerHTML\"><div class=\"flex items-center gap-2\"><div class=\"control\"><input class=\"rounded\" type=\"text\" name=\"link\" placeholder=\"Atom feed link\"></div><button class=\"bg-green-600 px-3 py-2 text-white rounded\">Fetch</button></div></form></div><div class=\"px-3 overflow-auto h-screen\" hx-feed-container><!-- feed items are displayed here --></div></div></section>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				if !templ_7745c5c3_IsBuffer {
+					_, templ_7745c5c3_Err = io.Copy(templ_7745c5c3_W, templ_7745c5c3_Buffer)
+				}
+				return templ_7745c5c3_Err
+			})
+			templ_7745c5c3_Err = components.Sidebar().Render(templ.WithChildren(ctx, templ_7745c5c3_Var3), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

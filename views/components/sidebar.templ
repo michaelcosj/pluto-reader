@@ -1,0 +1,126 @@
+package components
+
+import "github.com/michaelcosj/pluto-reader/views/icons"
+
+templ Sidebar() {
+	<div class="sidebar-container">
+		<div class="z-50 sidebar absolute top-0 left-0 h-screen w-16 bg-accent text-background py-2 px-4 transition-all duration-300 delay-75 ease-in">
+			<div class="top">
+				<div class="logo h-12 w-full flex gap-1.5 items-center opacity-0">
+					@icons.Atom()
+					<span class="inline-block">
+						<p class="text-lg">Pluto Reader</p>
+					</span>
+				</div>
+				<button
+					id="sidebar-open-btn"
+					type="button"
+					class="absolute top-5 left-1/2 -translate-x-1/2 inline-flex justify-center items-center px-0.5 py-0.5 rounded hover:text-accent hover:bg-background transition-all delay-75 duration-200"
+				>
+					@icons.Atom()
+				</button>
+				<button
+					id="sidebar-close-btn"
+					type="button"
+					class="absolute top-5 left-[88%] -translate-x-1/2 hidden inline-flex justify-center items-center px-0.5 py-0.5 rounded hover:text-accent hover:bg-background transition-all delay-300 duration-200"
+				>
+					@icons.ChevronLeft()
+				</button>
+			</div>
+			<ul class="menu my-12 transition-all delay-200 duration-700">
+				<li class="my-4 h-12 w-[90%] relative group">
+					<a href="#" class="flex gap-1.5 items-center px-0.5 py-1 rounded hover:text-accent hover:bg-background">
+						@icons.BellDot()
+						<span class="inline-block">
+							<p>Unread</p>
+						</span>
+					</a>
+					<span class="tooltip opacity-0 group-hover:opacity-100 absolute left-20 top-1 bg-text text-background translate-1/2 shadow-md rounded-xl py-0.5 px-3 z-50">Unread</span>
+				</li>
+				<li class="my-4 h-12 w-[90%] relative group">
+					<a href="#" class="flex gap-1.5 items-center px-0.5 py-1 rounded hover:text-accent hover:bg-background">
+						@icons.RSS()
+						<span class="inline-block">
+							<p>All</p>
+						</span>
+					</a>
+					<span class="tooltip opacity-0 group-hover:opacity-100 absolute left-20 top-1 bg-text text-background translate-1/2 shadow-md rounded-xl py-0.5 px-3 z-50">All</span>
+				</li>
+				<li class="my-4 h-12 w-[90%] relative group">
+					<a href="#" class="flex gap-1.5 items-center px-0.5 py-1 rounded hover:text-accent hover:bg-background">
+						@icons.Bookmark()
+						<span class="inline-block">
+							<p>Bookmarks</p>
+						</span>
+					</a>
+					<span class="tooltip opacity-0 group-hover:opacity-100 absolute left-20 top-1 bg-text text-background translate-1/2 shadow-md rounded-xl py-0.5 px-3 z-50">Bookmarks</span>
+				</li>
+				<li class="my-4 h-12 w-[90%] relative group">
+					<div class="flex gap-1.5 items-center px-0.5 py-1 rounded hover:text-accent hover:bg-background">
+						@icons.Library()
+						<span class="inline-block">
+							<p>Collections</p>
+						</span>
+						<span class="tooltip opacity-0 group-hover:opacity-100 absolute left-20 top-1 bg-text text-background translate-1/2 shadow-md rounded-xl py-0.5 px-3 z-50">Collections</span>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="main-content relative transition-all delay-100 duration-500 ">
+			{ children... }
+		</div>
+	</div>
+	<style type="text/css">
+        .sidebar.active {
+            width: 14rem;
+        }
+
+		.main-content {
+            left: 4rem;
+            width: calc(100% - 4rem);
+		}
+
+        @media (min-width:768px){
+		    .sidebar.active ~ .main-content {
+                left: 14rem;
+                width: calc(100% - 14rem);
+		    }
+        }
+
+        .sidebar.active .top .logo {
+            opacity: 1;
+        }
+
+        .sidebar p {
+           opacity: 0;
+           transition-property: opacity;
+           transition-duration: 150ms;
+           transition-delay: 300ms;
+        }
+
+        .sidebar.active p {
+           opacity: 1;
+        }
+
+        .sidebar.active ul li .tooltip {
+            display: none;
+        }
+	</style>
+	<script>
+        let sidebar = document.querySelector(".sidebar")
+        let sidebarOpenBtn = document.querySelector("#sidebar-open-btn")
+        let sidebarCloseBtn = document.querySelector("#sidebar-close-btn")
+        
+        sidebarOpenBtn.onclick = function() {
+            sidebarCloseBtn.classList.remove('hidden')
+            sidebarOpenBtn.classList.add('hidden')
+            sidebar.classList.add('active')
+        }
+    
+        sidebarCloseBtn.onclick = function() {
+            sidebarCloseBtn.classList.add('hidden')
+            sidebarOpenBtn.classList.remove('hidden')
+            sidebar.classList.remove('active')
+        }
+    </script>
+}

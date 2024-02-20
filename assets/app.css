@@ -1,3 +1,27 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:700|Poppins:400|Poppins:500|Poppins:600');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@layer base {
+  :root {
+    --text: 10 7 14;
+    --background: 250 248 252;
+    --primary: 119 87 168;
+    --secondary: 207 165 193;
+    --accent: 186 125 150;
+  }
+  .dark {
+    --text: 244 241 248;
+    --background: 5 3 7;
+    --primary: 119 87 168;
+    --secondary: 90 48 76;
+    --accent: 130 69 94;
+  }
+}
+
+body {
+    font-family: 'Poppins';
+}

@@ -1,9 +1,12 @@
 package pages
 
 import "github.com/michaelcosj/pluto-reader/views/layouts"
+import "github.com/michaelcosj/pluto-reader/views/components"
 
 templ Index() {
 	@layouts.Page("Home") {
+        @components.Sidebar(){
+        @components.Header()
 		<section class="px-16 py-12">
 			<div class="grid grid-cols-2">
 				<div class="flex flex-col gap-5">
@@ -17,8 +20,11 @@ templ Index() {
 						</div>
 					</form>
 				</div>
-				<div class="px-3" style="overflow:auto; height: 100vh;" hx-feed-container></div>
+				<div class="px-3 overflow-auto h-screen" hx-feed-container>
+					<!-- feed items are displayed here -->
+				</div>
 			</div>
 		</section>
+        }
 	}
 }

@@ -30,13 +30,13 @@ func Page(title string) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layouts/page.templ`, Line: 8, Col: 16}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layouts/page.templ`, Line: 8, Col: 17}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" - Pluto Reader!</title><link rel=\"stylesheet\" href=\"/dist/css/style.css\"><script src=\"/dist/js/htmx.min.js\"></script></head><body><!-- Header --><nav class=\"h-14 px-8 bg-black flex items-center justify-between\"><div><a href=\"/\"><h1 class=\"text-xl text-white\">Pluto Reader</h1></a></div><div class=\"flex items-center gap-5\"><a href=\"/\" class=\"bg-green-600 text-white px-3 py-1.5 rounded-sm\">Add Feed</a> <a href=\"/auth/logout\" class=\"text-white underline hover:font-bold\">Log out</a></div></nav><!-- Header End -->")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" - Pluto Reader!</title><script src=\"/dist/js/htmx.min.js\"></script><link rel=\"stylesheet\" href=\"/dist/css/style.css\"></head><body class=\"bg-background text-text\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -44,7 +44,7 @@ func Page(title string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</body></html>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</body><script src=\"/dist/js/app.js\"></script></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

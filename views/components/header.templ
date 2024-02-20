@@ -1,0 +1,21 @@
+package components
+
+templ Header() {
+	<div class="mx-2">
+		<nav class="h-14 p-5 border-b border-text/10 flex items-center justify-between">
+			<div>
+				<a href="/">
+					<h1 class="md:text-xl">Pluto Reader</h1>
+				</a>
+			</div>
+			<div class="flex items-center gap-5 py-2">
+				<a href="/" class="hidden md:inline-flex bg-primary text-background px-2 py-1.5 rounded-sm text-base">
+					Add Feed
+				</a>
+				<a href="/auth/logout" class="text-white underline hover:font-bold text-sm md:text-base">
+					Log out
+				</a>
+			</div>
+		</nav>
+	</div>
+}
