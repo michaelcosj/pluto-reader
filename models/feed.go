@@ -11,7 +11,7 @@ type FeedEnclosure struct {
 type FeedItem struct {
 	ID          int
 	IsRead      bool
-	ItemID      string
+	EntryID      string
 	Title       string
 	Summary     string
 	Link        string

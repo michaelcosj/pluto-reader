@@ -27,31 +27,33 @@ func init() {
 func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
-    r.Use(middleware.CleanPath)
+	r.Use(middleware.CleanPath)
 
-    sessionManager := scs.New()
-    sessionManager.Store = memstore.New()
+	sessionManager := scs.New()
+	sessionManager.Store = memstore.New()
 
-    ctx := context.Background()
-    dbConn, err := pgx.Connect(ctx, os.Getenv("PG_DSN"))
-    if err != nil {
-        log.Fatalf("error connecting to database: %w", err)
-    }
-    defer dbConn.Close(ctx)
+	ctx := context.Background()
+	dbConn, err := pgx.Connect(ctx, os.Getenv("PG_DSN"))
+	if err != nil {
+		log.Fatalf("error connecting to database: %w", err)
+	}
+	defer dbConn.Close(ctx)
 
-    queries := repository.New(dbConn)
-	googleAuthService := services.GoogleOauth(queries)
+	queries := repository.New(dbConn)
+	usersService := services.Users(queries)
 
-	googleAuthHandler := handlers.GoogleOauth(googleAuthService, sessionManager)
-
+	indexHandler := handlers.Index()
 	r.Group(func(r chi.Router) {
-        r.Get("/auth", googleAuthHandler.ShowSignInPage)
-		r.Get("/auth/signin", googleAuthHandler.SignIn)
-		r.Get("/auth/callback", googleAuthHandler.Callback)
+		r.Get("/", indexHandler.ShowIndexPage)
+		r.Post("/getfeed", indexHandler.GetFeed)
 	})
 
-	r.Get("/", handlers.ShowIndexPage)
-	r.Post("/getfeed", handlers.GetFeed)
+	googleOauthHandler := handlers.GoogleOauth(usersService, sessionManager)
+	r.Group(func(r chi.Router) {
+		r.Get("/auth", googleOauthHandler.ShowSignInPage)
+		r.Get("/auth/signin", googleOauthHandler.SignIn)
+		r.Get("/auth/callback", googleOauthHandler.Callback)
+	})
 
 	r.Handle("/dist/*", assets.Mount())
 

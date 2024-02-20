@@ -7,7 +7,7 @@ package repository
 import ()
 
 type User struct {
-	ID       int32
+	ID       int64
 	OauthSub string
 	Email    string
 	Name     string

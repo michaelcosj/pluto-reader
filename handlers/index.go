@@ -11,12 +11,18 @@ import (
 	"github.com/michaelcosj/pluto-reader/views/pages"
 )
 
-func ShowIndexPage(w http.ResponseWriter, r *http.Request) {
+type IndexHandler struct { }
+
+func Index() *IndexHandler {
+	return &IndexHandler{}
+}
+
+func (h *IndexHandler) ShowIndexPage(w http.ResponseWriter, r *http.Request) {
 	home := pages.Index()
 	home.Render(context.Background(), w)
 }
 
-func GetFeed(w http.ResponseWriter, r *http.Request) {
+func (h *IndexHandler) GetFeed(w http.ResponseWriter, r *http.Request) {
 	link := r.FormValue("link")
 	if link == "" {
 		log.Fatalf("invalid url")
