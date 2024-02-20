@@ -55,13 +55,13 @@ type atomFeed struct {
 	Entries  []atomEntry `xml:"entry"`
 }
 
-func parseAtom(data []byte) (*models.Feed, error) {
+func parseAtom(data []byte) (*models.FeedDTO, error) {
 	var feed atomFeed
 	if err := xml.Unmarshal(data, &feed); err != nil {
 		return nil, err
 	}
 
-	res := &models.Feed{
+	res := &models.FeedDTO{
 		Title:        feed.Title,
 		Description:  feed.Subtitle,
 		Items:        make([]*models.FeedItem, len(feed.Entries)-1),
@@ -86,7 +86,7 @@ func parseAtom(data []byte) (*models.Feed, error) {
 			Title:       entry.Title,
 			Summary:     entry.Summary,
 			Content:     entry.Content.Raw,
-			ItemID:      entry.ID,
+			EntryID:      entry.ID,
 			IsRead:      false,
 			IsDateValid: true,
 		}
@@ -113,7 +113,7 @@ func parseAtom(data []byte) (*models.Feed, error) {
 		}
 
 		res.Items = append(res.Items, item)
-		res.ItemCheckMap[item.ItemID] = struct{}{}
+		res.ItemCheckMap[item.EntryID] = struct{}{}
 	}
 
 	return res, nil

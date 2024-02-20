@@ -4,11 +4,50 @@
 
 package repository
 
-import ()
+import (
+	"github.com/jackc/pgx/v5/pgtype"
+)
+
+type Feed struct {
+	ID            int32
+	Title         pgtype.Text
+	Description   pgtype.Text
+	SiteLink      pgtype.Text
+	FeedLink      string
+	LastRefreshed pgtype.Timestamptz
+}
+
+type FeedItem struct {
+	ID            int32
+	EntryID       pgtype.Text
+	Title         pgtype.Text
+	Summary       pgtype.Text
+	Link          string
+	Content       pgtype.Text
+	ItemUpdated   pgtype.Timestamptz
+	ItemPublished pgtype.Timestamptz
+	FeedID        pgtype.Int4
+}
 
 type User struct {
-	ID       int64
+	ID       int32
 	OauthSub string
 	Email    string
 	Name     string
+}
+
+type UserFeed struct {
+	ID             int32
+	UserID         int32
+	FeedID         int32
+	FeedName       pgtype.Text
+	LastUpdated    pgtype.Timestamptz
+	UpdateInterval pgtype.Interval
+}
+
+type UserFeedItem struct {
+	ID     int32
+	UserID int32
+	ItemID int32
+	IsRead pgtype.Bool
 }

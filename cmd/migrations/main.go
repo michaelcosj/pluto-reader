@@ -59,7 +59,7 @@ func main() {
 			panic(err)
 		}
 	default:
-		log.Fatal("invalid migration argument: must be one of 'up', 'down', 'redo' and 'reset'")
+		log.Fatal("invalid migration argument: must be one of 'up', 'down', 'redo' and 'reset'\n")
 	}
 
 }

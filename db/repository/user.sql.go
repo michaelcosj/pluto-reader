@@ -36,50 +36,14 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	return i, err
 }
 
-const createUserIfNotExist = `-- name: CreateUserIfNotExist :exec
-INSERT INTO users (
-  oauth_sub, email, name
-) VALUES (
-  $1, $2, $3
-) ON CONFLICT DO NOTHING
-`
-
-type CreateUserIfNotExistParams struct {
-	OauthSub string
-	Email    string
-	Name     string
-}
-
-func (q *Queries) CreateUserIfNotExist(ctx context.Context, arg CreateUserIfNotExistParams) error {
-	_, err := q.db.Exec(ctx, createUserIfNotExist, arg.OauthSub, arg.Email, arg.Name)
-	return err
-}
-
 const deleteUser = `-- name: DeleteUser :exec
 DELETE FROM users
 WHERE id = $1
 `
 
-func (q *Queries) DeleteUser(ctx context.Context, id int64) error {
+func (q *Queries) DeleteUser(ctx context.Context, id int32) error {
 	_, err := q.db.Exec(ctx, deleteUser, id)
 	return err
-}
-
-const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, oauth_sub, email, name FROM users
-WHERE email = $1 LIMIT 1
-`
-
-func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
-	row := q.db.QueryRow(ctx, getUserByEmail, email)
-	var i User
-	err := row.Scan(
-		&i.ID,
-		&i.OauthSub,
-		&i.Email,
-		&i.Name,
-	)
-	return i, err
 }
 
 const getUserByID = `-- name: GetUserByID :one
@@ -87,7 +51,7 @@ SELECT id, oauth_sub, email, name FROM users
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetUserByID(ctx context.Context, id int64) (User, error) {
+func (q *Queries) GetUserByID(ctx context.Context, id int32) (User, error) {
 	row := q.db.QueryRow(ctx, getUserByID, id)
 	var i User
 	err := row.Scan(
@@ -123,7 +87,7 @@ WHERE id = $1
 `
 
 type UpdateUserParams struct {
-	ID   int64
+	ID   int32
 	Name string
 }
 

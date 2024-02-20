@@ -2,12 +2,14 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/alexedwards/scs/v2"
+	"github.com/michaelcosj/pluto-reader/models"
 	"github.com/michaelcosj/pluto-reader/services"
 	"github.com/michaelcosj/pluto-reader/utils"
 	"github.com/michaelcosj/pluto-reader/views/pages"
@@ -17,19 +19,13 @@ import (
 
 const GOOGLE_USER_PROFILE_API = "https://www.googleapis.com/oauth2/v2/userinfo"
 
-type googleUserData struct {
-	Email    string `json:"email"`
-	Name     string `json:"name"`
-	OauthSub string `json:"id"`
-}
-
 type GoogleOauthHandler struct {
 	oauthConfig    *oauth2.Config
-	userService    *services.UserService
+	userService    *services.UsersService
 	sessionManager *scs.SessionManager
 }
 
-func GoogleOauth(service *services.UserService, sessionManager *scs.SessionManager) *GoogleOauthHandler {
+func GoogleOauth(service *services.UsersService, sessionManager *scs.SessionManager) *GoogleOauthHandler {
 	config := &oauth2.Config{
 		ClientID:     os.Getenv("GOOGLE_OAUTH_CLIENT_ID"),
 		ClientSecret: os.Getenv("GOOGLE_OAUTH_CLIENT_SECRET"),
@@ -44,12 +40,8 @@ func GoogleOauth(service *services.UserService, sessionManager *scs.SessionManag
 	return &GoogleOauthHandler{config, service, sessionManager}
 }
 
-func (h *GoogleOauthHandler) ShowSignInPage(w http.ResponseWriter, r *http.Request) {
-	userId := h.sessionManager.GetInt32(r.Context(), "userID")
-	if userId > 0 {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-	}
-
+func (h *GoogleOauthHandler) Index(w http.ResponseWriter, r *http.Request) {
+    fmt.Printf("hello?")
 	authPage := pages.Auth()
 	authPage.Render(r.Context(), w)
 }
@@ -92,12 +84,12 @@ func (h *GoogleOauthHandler) Callback(w http.ResponseWriter, r *http.Request) {
 		log.Fatalf("error reading user data %w", err)
 	}
 
-	var userData googleUserData
+	var userData models.UserDTO
 	if err := json.Unmarshal(data, &userData); err != nil {
 		log.Fatalf("error parsing user data %w", err)
 	}
-	user, err := h.userService.CreateUser(r.Context(), userData.Email, userData.Name, userData.OauthSub)
 
+	user, err := h.userService.CreateUser(r.Context(), userData)
 	if err := h.sessionManager.RenewToken(r.Context()); err != nil {
 		log.Fatalf("error renewing session token %w", err)
 	}

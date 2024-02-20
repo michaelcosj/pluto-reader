@@ -13,4 +13,4 @@ templ generate &&
 tailwindcss -i ./assets/app.css -o ./assets/dist/css/style.css &&
 
 # build program
-go build -o ./tmp/main ./cmd/web/main.go
+go build -o ./tmp/main ./cmd/http/main.go

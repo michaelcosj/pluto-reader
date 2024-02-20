@@ -1,7 +1,8 @@
 package parser
 
 import (
-	"io/ioutil"
+	"io"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -34,7 +35,7 @@ func TestParseAtomFeed(t *testing.T) {
 
 	for test, want := range tests {
 		fileName := filepath.Join("../testdata", test)
-		data, err := ioutil.ReadFile(fileName)
+		data, err := os.ReadFile(fileName)
 		if err != nil {
 			t.Fatalf("reading file %s :%v", fileName, err)
 		}

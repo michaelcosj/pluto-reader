@@ -21,7 +21,7 @@ type FeedItem struct {
 	Enclosures  []FeedEnclosure
 }
 
-type Feed struct {
+type FeedDTO struct {
 	ID           int
 	Title        string
 	Description  string

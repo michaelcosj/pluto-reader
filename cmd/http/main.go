@@ -43,19 +43,21 @@ func main() {
 	usersService := services.Users(queries)
 
 	indexHandler := handlers.Index()
-	r.Group(func(r chi.Router) {
-		r.Get("/", indexHandler.ShowIndexPage)
-		r.Post("/getfeed", indexHandler.GetFeed)
-	})
+	r.Get("/", indexHandler.ShowIndexPage)
+	r.Post("/getfeed", indexHandler.GetFeed)
 
 	googleOauthHandler := handlers.GoogleOauth(usersService, sessionManager)
-	r.Group(func(r chi.Router) {
-		r.Get("/auth", googleOauthHandler.ShowSignInPage)
-		r.Get("/auth/signin", googleOauthHandler.SignIn)
-		r.Get("/auth/callback", googleOauthHandler.Callback)
+	r.Route("/auth", func(r chi.Router) {
+		r.Get("/", googleOauthHandler.Index)
+		r.Get("/signin", googleOauthHandler.SignIn)
+		r.Get("/callback", googleOauthHandler.Callback)
+	})
+
+	feedsHandler := handlers.Feeds()
+	r.Route("/feed", func(r chi.Router) {
+		r.Post("/new", feedsHandler.AddFeed)
 	})
 
 	r.Handle("/dist/*", assets.Mount())
-
 	http.ListenAndServe(":3000", sessionManager.LoadAndSave(r))
 }
