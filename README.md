@@ -1,4 +1,7 @@
+# Pluto RSS/Atom Reader
 (WIP)
+
+# Features  
 - [x] Sign in with Google Oath
 - [ ] Show user's feeds
 - [ ] Display contents of a single feed
