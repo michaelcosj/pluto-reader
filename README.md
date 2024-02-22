@@ -1,11 +1,16 @@
-Features
-- [x] User accounts
-- [x] Use google oauth for authentication
-- [x] Data pesistence in postgresql
-- [ ] Add rss feed from site url
-- [ ] Open feed url in a seperate tab
-- [ ] Create collections to group feeds (an all collection is created by default and stores all feeds)
-- [ ] Bookmark a feed item
-- [ ] Favourite a feed (stored as a favourites collection which is created by default)
-- [ ] Setting to refresh feed on a certain interval
-- [ ] Service workers and cache for offline functionality
+(WIP)
+- [x] Sign in with Google Oath
+- [ ] Show user's feeds
+- [ ] Display contents of a single feed
+- [ ] Add a feed from a rss/atom url, giving it a name and an update interval
+- [ ] Delete a feed
+- [ ] Edit the name of a feed.
+- [ ] Bookmark a feed
+- [ ] Create a collection for grouping feeds.
+- [ ] Add a feed to a collection.
+- [ ] Delete a collection.
+- [ ] Edit collection name.
+- [ ] Change update interval of a feed.
+- [ ] Background job that updates feeds based on it's update interval.
+- [ ] Host on AWS
+- [ ] Service workers and local caching for offline PWA functionality.
