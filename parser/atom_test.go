@@ -1,7 +1,6 @@
 package parser
 
 import (
-	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -78,7 +77,7 @@ func TestParseAtomItems(t *testing.T) {
 
 	for test, want := range tests {
 		fileName := filepath.Join("../testdata", test)
-		data, err := ioutil.ReadFile(fileName)
+		data, err := os.ReadFile(fileName)
 		if err != nil {
 			t.Fatalf("reading file %s :%v", fileName, err)
 		}
@@ -105,8 +104,8 @@ func TestParseAtomItems(t *testing.T) {
 				t.Fatalf("[link] got %s expected %s in %s", item.Link, want[k].link, fileName)
 			}
 
-			if item.ItemID != want[k].id {
-				t.Fatalf("[id] got %s expected %s in %s", item.ItemID, want[k].id, fileName)
+			if item.EntryID != want[k].id {
+				t.Fatalf("[id] got %s expected %s in %s", item.EntryID, want[k].id, fileName)
 			}
 
 			if strings.TrimSpace(item.Content) != want[k].content {

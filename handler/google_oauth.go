@@ -9,10 +9,10 @@ import (
 	"os"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/michaelcosj/pluto-reader/models"
-	"github.com/michaelcosj/pluto-reader/services"
-	"github.com/michaelcosj/pluto-reader/utils"
-	"github.com/michaelcosj/pluto-reader/views/pages"
+	"github.com/michaelcosj/pluto-reader/model"
+	"github.com/michaelcosj/pluto-reader/service"
+	"github.com/michaelcosj/pluto-reader/util"
+	"github.com/michaelcosj/pluto-reader/view/page"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 )

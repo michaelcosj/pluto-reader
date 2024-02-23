@@ -6,8 +6,8 @@ import (
 	"net/url"
 
 	"github.com/michaelcosj/pluto-reader/parser"
-	"github.com/michaelcosj/pluto-reader/utils"
-	"github.com/michaelcosj/pluto-reader/views/components"
+	"github.com/michaelcosj/pluto-reader/util"
+	"github.com/michaelcosj/pluto-reader/view/component"
 )
 
 type FeedsHandler struct {

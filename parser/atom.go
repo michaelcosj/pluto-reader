@@ -4,8 +4,8 @@ import (
 	"encoding/xml"
 	"log"
 
-	"github.com/michaelcosj/pluto-reader/models"
-	"github.com/michaelcosj/pluto-reader/utils"
+	"github.com/michaelcosj/pluto-reader/model"
+	"github.com/michaelcosj/pluto-reader/util"
 )
 
 type atomAuthor struct {

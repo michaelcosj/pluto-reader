@@ -21,7 +21,7 @@ func init() {
 func main() {
 	db, err := sql.Open("pgx", os.Getenv("PG_DSN"))
 	if err != nil {
-		log.Fatalf("unable to connect to database: %w", err)
+		log.Fatalf("unable to connect to database: %v", err)
 	}
 
 	goose.SetBaseFS(migrations.Embed)

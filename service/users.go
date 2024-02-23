@@ -7,7 +7,7 @@ import (
 	"fmt"
 
 	"github.com/michaelcosj/pluto-reader/db/repository"
-	"github.com/michaelcosj/pluto-reader/models"
+	"github.com/michaelcosj/pluto-reader/model"
 )
 
 type UsersService struct {

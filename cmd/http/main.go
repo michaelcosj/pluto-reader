@@ -14,8 +14,8 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/michaelcosj/pluto-reader/assets"
 	"github.com/michaelcosj/pluto-reader/db/repository"
-	"github.com/michaelcosj/pluto-reader/handlers"
-	"github.com/michaelcosj/pluto-reader/services"
+	"github.com/michaelcosj/pluto-reader/handler"
+	"github.com/michaelcosj/pluto-reader/service"
 )
 
 func init() {

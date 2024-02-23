@@ -6,9 +6,9 @@ import (
 	"net/http"
 
 	"github.com/michaelcosj/pluto-reader/parser"
-	"github.com/michaelcosj/pluto-reader/utils"
-	"github.com/michaelcosj/pluto-reader/views/components"
-	"github.com/michaelcosj/pluto-reader/views/pages"
+	"github.com/michaelcosj/pluto-reader/util"
+	"github.com/michaelcosj/pluto-reader/view/component"
+	"github.com/michaelcosj/pluto-reader/view/page"
 )
 
 type IndexHandler struct { }
