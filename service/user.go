@@ -9,8 +9,9 @@ import (
 
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/michaelcosj/pluto-reader/db/repository"
-	"github.com/michaelcosj/pluto-reader/model"
 )
+
+type UserFeedItems []repository.UserGetFeedItemsRow
 
 type UserService struct {
 	queries *repository.Queries
@@ -26,18 +27,18 @@ type AddFeedParams struct {
 	FeedName string
 }
 
-func (s *UserService) CreateUser(ctx context.Context, userData *model.UserDTO) (int32, error) {
+func (s *UserService) CreateUser(ctx context.Context, sub, email, name string) (int32, error) {
 	var userID int32 = 0
-	user, err := s.queries.UserGetByOauthSub(ctx, userData.OauthSub)
+	user, err := s.queries.UserGetByOauthSub(ctx, sub)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return 0, fmt.Errorf("error checking if user exists %w", err)
 		}
 
 		createUserParams := repository.UserCreateParams{
-			Email:    userData.Email,
-			Name:     userData.Name,
-			OauthSub: userData.OauthSub,
+			Email:    email,
+			Name:     name,
+			OauthSub: sub,
 		}
 
 		if userID, err = s.queries.UserCreate(ctx, createUserParams); err != nil {
@@ -55,7 +56,7 @@ func (s *UserService) AddFeedToUser(ctx context.Context, userID, feedID int32, f
 		UserID:         userID,
 		FeedID:         feedID,
 		FeedName:       feedName,
-		UpdateInterval: pgtype.Interval{Microseconds: time.Hour.Microseconds()},
+		UpdateInterval: pgtype.Interval{Microseconds: time.Hour.Microseconds(), Valid: true},
 	})
 
 	if err != nil {
@@ -81,4 +82,13 @@ func (s *UserService) AddFeedToUser(ctx context.Context, userID, feedID int32, f
 	}
 
 	return nil
+}
+
+func (s *UserService) GetUserFeedItems(ctx context.Context, userId int32) (UserFeedItems, error) {
+	items, err := s.queries.UserGetFeedItems(ctx, userId)
+	if err != nil {
+		return nil, fmt.Errorf("error getting user feed items: %w", err)
+	}
+
+	return UserFeedItems(items), nil
 }

@@ -46,7 +46,6 @@ func main() {
 
 	indexHandler := handler.Index()
 	r.Get("/", indexHandler.ShowIndexPage)
-	r.Post("/getfeed", indexHandler.GetFeed)
 
 	googleOauthHandler := handler.GoogleOauth(usersService, sessionManager)
 	r.Route("/auth", func(r chi.Router) {
@@ -57,6 +56,7 @@ func main() {
 
 	feedsHandler := handler.Feeds(feedService, usersService, sessionManager)
 	r.Route("/feed", func(r chi.Router) {
+        r.Get("/get-items", feedsHandler.GetUserFeedItems)
 		r.Post("/new", feedsHandler.AddFeed)
 	})
 

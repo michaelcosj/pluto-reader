@@ -1,27 +1,23 @@
 package components
 
-import "github.com/michaelcosj/pluto-reader/model"
-
-templ CardList(feed *model.FeedDTO) {
-	for _, v := range feed.Items {
-		if v != nil {
-			@Card(v.Title, v.Summary, v.Link)
-		}
+templ CardList(feed []string) {
+	for _, v := range feed {
+		@Card(v)
 	}
 }
 
-templ Card(title string, subtitle string, link string) {
+templ Card(title string) {
 	<div class="mb-8 shadow-md py-3 px-2 flex flex-col gap-3 border">
 		<div class="px-5">
 			<p class="text-lg">
 				{ title }
 			</p>
 			<p class="">
-				{ subtitle }
+			<!--	{ subtitle } -->
 			</p>
 		</div>
 		<footer class="flex items-center gap-3 justify-end">
-			<a href={ templ.SafeURL(link) } target="_blank" class="card-footer-item">View</a>
+			<!-- <a href={ templ.SafeURL(link) } target="_blank" class="card-footer-item">View</a> -->
 			<a href="#" class="card-footer-item">Add To Folder</a>
 			<a href="#" class="card-footer-item">Mark As Read</a>
 		</footer>

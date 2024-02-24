@@ -12,6 +12,7 @@ import "bytes"
 
 import "github.com/michaelcosj/pluto-reader/view/layout"
 import "github.com/michaelcosj/pluto-reader/view/component"
+import "github.com/michaelcosj/pluto-reader/service"
 
 func Index() templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
@@ -42,7 +43,7 @@ func Index() templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <section class=\"py-12\"><div class=\"grid grid-cols-2\"><div class=\"flex flex-col gap-5 items-center\"><h1 class=\"text-2xl\">Input an atom link</h1><form hx-post=\"/feed/new\" hx-target=\"[hx-feed-container]\" hx-swap=\"innerHTML\"><div class=\"flex flex-col items-center gap-2\"><div class=\"control\"><input class=\"rounded\" type=\"text\" name=\"url\" placeholder=\"Atom feed link\"></div><div class=\"control\"><input class=\"rounded\" type=\"text\" name=\"name\" placeholder=\"Feed name\"></div><button class=\"bg-primary px-3 py-2 text-background rounded\" type=\"submit\">Fetch</button></div></form></div><div class=\"px-3 overflow-auto h-screen\" hx-feed-container><!-- feed items are displayed here --></div></div></section>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <section><div class=\"grid grid-cols-2 py-4\"><div class=\"h-[85vh] overflow-auto\"><div hx-get=\"/feed/get-items\" hx-trigger=\"load\" hx-swap=\"outerHTML\"><img class=\"htmx-indicator\" src=\"/tail-spin.svg\"></div><!--\n\t\t\t\t\t<h1 class=\"text-2xl\">Input an atom link</h1>\n\t\t\t\t\t<form action=\"/feed/new\" method=\"post\">\n\t\t\t\t\t\t<div class=\"flex flex-col items-center gap-2\">\n\t\t\t\t\t\t\t<div class=\"control\">\n\t\t\t\t\t\t\t\t<input class=\"rounded\" type=\"text\" name=\"url\" placeholder=\"Atom feed link\"/>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"control\">\n\t\t\t\t\t\t\t\t<input class=\"rounded\" type=\"text\" name=\"name\" placeholder=\"Feed name\"/>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<button class=\"bg-primary px-3 py-2 text-background rounded\" type=\"submit\">Fetch</button>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</form>\n                    --></div><div class=\"px-3 overflow-auto h-screen\" hx-feed-content-container><!-- feed items are displayed here --></div></div></section>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -61,6 +62,75 @@ func Index() templ.Component {
 			return templ_7745c5c3_Err
 		})
 		templ_7745c5c3_Err = layouts.Page("Home").Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if !templ_7745c5c3_IsBuffer {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteTo(templ_7745c5c3_W)
+		}
+		return templ_7745c5c3_Err
+	})
+}
+
+func FeedItemList(items service.UserFeedItems) templ.Component {
+	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
+		if !templ_7745c5c3_IsBuffer {
+			templ_7745c5c3_Buffer = templ.GetBuffer()
+			defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var4 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var4 == nil {
+			templ_7745c5c3_Var4 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"px-3 flex flex-col items-start gap-3\" hx-feed-item-container><!-- feed items are displayed here -->")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		for _, item := range items {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"w-full mb-8 shadow-md py-3 px-2 flex flex-col gap-3 border\"><div class=\"px-5\"><p class=\"text-lg\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var5 string
+			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(item.Title.String)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/page/index.templ`, Line: 47, Col: 25}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><p class=\"\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var6 string
+			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(item.Summary.String)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/page/index.templ`, Line: 50, Col: 27}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p></div><footer class=\"flex items-center gap-3 justify-end\"><a href=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var7 templ.SafeURL = templ.SafeURL(item.Link)
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var7)))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" target=\"_blank\" class=\"card-footer-item\">View</a> <a href=\"#\" class=\"card-footer-item\">Add To Folder</a> <a href=\"#\" class=\"card-footer-item\">Mark As Read</a></footer></div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

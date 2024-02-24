@@ -4,7 +4,6 @@ import (
 	"encoding/xml"
 	"log"
 
-	"github.com/michaelcosj/pluto-reader/model"
 	"github.com/michaelcosj/pluto-reader/util"
 )
 
@@ -55,16 +54,16 @@ type atomFeed struct {
 	Entries  []atomEntry `xml:"entry"`
 }
 
-func parseAtom(data []byte) (*model.FeedDTO, error) {
+func parseAtom(data []byte) (*Feed, error) {
 	var feed atomFeed
 	if err := xml.Unmarshal(data, &feed); err != nil {
 		return nil, err
 	}
 
-	res := &model.FeedDTO{
+	res := &Feed{
 		Title:        feed.Title,
 		Description:  feed.Subtitle,
-		Items:        make([]*model.FeedItem, len(feed.Entries)-1),
+		Items:        make([]*FeedItem, 0),
 		ItemCheckMap: make(map[string]struct{}),
 	}
 
@@ -82,7 +81,7 @@ func parseAtom(data []byte) (*model.FeedDTO, error) {
 			continue
 		}
 
-		item := &model.FeedItem{
+		item := &FeedItem{
 			Title:       entry.Title,
 			Summary:     entry.Summary,
 			Content:     entry.Content.Raw,
@@ -95,7 +94,7 @@ func parseAtom(data []byte) (*model.FeedDTO, error) {
 			if link.Rel == "alternate" || link.Rel == "" {
 				item.Link = link.Href
 			} else if link.Rel == "enclosure" {
-				item.Enclosures = append(item.Enclosures, model.FeedEnclosure{
+				item.Enclosures = append(item.Enclosures, FeedEnclosure{
 					Type:   link.Type,
 					Href:   link.Href,
 					Length: link.Length,

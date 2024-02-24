@@ -35,11 +35,11 @@ func (h *IndexHandler) GetFeed(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	feed, err := parser.Parse(data)
+	_, err = parser.Parse(data)
 	if err != nil {
 		log.Fatalf("error parsing data, %v\n", err)
 	}
 
-	cardList := components.CardList(feed)
+	cardList := components.CardList([]string{"hello", "world"})
 	cardList.Render(r.Context(), w)
 }

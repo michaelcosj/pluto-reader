@@ -108,6 +108,59 @@ func (q *Queries) UserGetByOauthSub(ctx context.Context, oauthSub string) (User,
 	return i, err
 }
 
+const userGetFeedItems = `-- name: UserGetFeedItems :many
+SELECT
+	fi.id, fi.entry_id, fi.title,
+    fi.summary, fi.link, fi.item_updated,
+    fi.feed_id, ufi.is_read
+FROM
+	feed_items fi
+JOIN user_feed_items ufi on
+	(ufi.item_id = fi.id)
+WHERE
+	ufi.user_id = $1
+`
+
+type UserGetFeedItemsRow struct {
+	ID          int32
+	EntryID     pgtype.Text
+	Title       pgtype.Text
+	Summary     pgtype.Text
+	Link        string
+	ItemUpdated pgtype.Timestamptz
+	FeedID      int32
+	IsRead      pgtype.Bool
+}
+
+func (q *Queries) UserGetFeedItems(ctx context.Context, userID int32) ([]UserGetFeedItemsRow, error) {
+	rows, err := q.db.Query(ctx, userGetFeedItems, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []UserGetFeedItemsRow
+	for rows.Next() {
+		var i UserGetFeedItemsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.EntryID,
+			&i.Title,
+			&i.Summary,
+			&i.Link,
+			&i.ItemUpdated,
+			&i.FeedID,
+			&i.IsRead,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const userUpdate = `-- name: UserUpdate :exec
 UPDATE users
   set name = $2

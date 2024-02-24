@@ -39,3 +39,14 @@ INSERT INTO user_feed_items (
     $1, $2
 );
 
+-- name: UserGetFeedItems :many
+SELECT
+	fi.id, fi.entry_id, fi.title,
+    fi.summary, fi.link, fi.item_updated,
+    fi.feed_id, ufi.is_read
+FROM
+	feed_items fi
+JOIN user_feed_items ufi on
+	(ufi.item_id = fi.id)
+WHERE
+	ufi.user_id = $1;

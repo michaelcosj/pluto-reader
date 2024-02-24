@@ -7,6 +7,7 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/michaelcosj/pluto-reader/service"
+	pages "github.com/michaelcosj/pluto-reader/view/page"
 )
 
 type FeedsHandler struct {
@@ -47,4 +48,19 @@ func (h *FeedsHandler) AddFeed(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func (h *FeedsHandler) GetUserFeedItems(w http.ResponseWriter, r *http.Request)  {
+	userID := h.sessionManager.GetInt32(r.Context(), "userID")
+	if userID == 0 {
+		log.Fatalf("user not authenticated\n")
+	}
+    
+    feedItems, err := h.userService.GetUserFeedItems(r.Context(), userID)
+    if err != nil {
+        log.Fatalf("error getting user feed items: %v\n", err)
+    }
+
+    feedItemList := pages.FeedItemList(feedItems)
+    feedItemList.Render(r.Context(), w)
 }

@@ -52,7 +52,7 @@ func (s *FeedService) ParseAndCreateFeed(ctx context.Context, feedUrl string) (i
 				Title:       pgtype.Text{String: item.Title, Valid: true},
 				Summary:     pgtype.Text{String: item.Summary, Valid: true},
 				Content:     pgtype.Text{String: item.Content, Valid: true},
-				ItemUpdated: pgtype.Timestamptz{Time: item.Date, Valid: true},
+				ItemUpdated: pgtype.Timestamptz{Time: item.Date, Valid: item.IsDateValid},
 			})
 		}
 	}

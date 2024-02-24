@@ -2,16 +2,21 @@ package pages
 
 import "github.com/michaelcosj/pluto-reader/view/layout"
 import "github.com/michaelcosj/pluto-reader/view/component"
+import "github.com/michaelcosj/pluto-reader/service"
 
 templ Index() {
 	@layouts.Page("Home") {
-        @components.Sidebar(){
-        @components.Header()
-		<section class="py-12">
-			<div class="grid grid-cols-2">
-				<div class="flex flex-col gap-5 items-center">
+		@components.Sidebar() {
+			@components.Header()
+			<section>
+				<div class="grid grid-cols-2 py-4">
+					<div class="h-[85vh] overflow-auto">
+						<div hx-get="/feed/get-items" hx-trigger="load" hx-swap="outerHTML">
+							<img class="htmx-indicator" src="/tail-spin.svg"/>
+						</div>
+						<!--
 					<h1 class="text-2xl">Input an atom link</h1>
-					<form hx-post="/feed/new" hx-target="[hx-feed-container]" hx-swap="innerHTML">
+					<form action="/feed/new" method="post">
 						<div class="flex flex-col items-center gap-2">
 							<div class="control">
 								<input class="rounded" type="text" name="url" placeholder="Atom feed link"/>
@@ -22,12 +27,36 @@ templ Index() {
 							<button class="bg-primary px-3 py-2 text-background rounded" type="submit">Fetch</button>
 						</div>
 					</form>
+                    -->
+					</div>
+					<div class="px-3 overflow-auto h-screen" hx-feed-content-container>
+						<!-- feed items are displayed here -->
+					</div>
 				</div>
-				<div class="px-3 overflow-auto h-screen" hx-feed-container>
-					<!-- feed items are displayed here -->
-				</div>
-			</div>
-		</section>
-        }
+			</section>
+		}
 	}
+}
+
+templ FeedItemList(items service.UserFeedItems) {
+	<div class="px-3 flex flex-col items-start gap-3" hx-feed-item-container>
+		<!-- feed items are displayed here -->
+		for _, item := range items {
+			<div class="w-full mb-8 shadow-md py-3 px-2 flex flex-col gap-3 border">
+				<div class="px-5">
+					<p class="text-lg">
+						{ item.Title.String }
+					</p>
+					<p class="">
+						{ item.Summary.String }
+					</p>
+				</div>
+				<footer class="flex items-center gap-3 justify-end">
+					<a href={ templ.SafeURL(item.Link) } target="_blank" class="card-footer-item">View</a>
+					<a href="#" class="card-footer-item">Add To Folder</a>
+					<a href="#" class="card-footer-item">Mark As Read</a>
+				</footer>
+			</div>
+		}
+	</div>
 }

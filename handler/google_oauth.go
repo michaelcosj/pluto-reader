@@ -9,7 +9,6 @@ import (
 	"os"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/michaelcosj/pluto-reader/model"
 	"github.com/michaelcosj/pluto-reader/service"
 	"github.com/michaelcosj/pluto-reader/util"
 	"github.com/michaelcosj/pluto-reader/view/page"
@@ -17,7 +16,13 @@ import (
 	"golang.org/x/oauth2/google"
 )
 
-const GOOGLE_USER_PROFILE_API = "https://www.googleapis.com/oauth2/v2/userinfo"
+const OauthProfileAPI = "https://www.googleapis.com/oauth2/v2/userinfo"
+
+type OauthProfileData struct {
+	Sub   string `json:"id"`
+	Email string `json:"email"`
+	Name  string `json:"name"`
+}
 
 type GoogleOauthHandler struct {
 	oauthConfig    *oauth2.Config
@@ -68,7 +73,7 @@ func (h *GoogleOauthHandler) Callback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	client := http.Client{}
-	req, err := http.NewRequest("GET", GOOGLE_USER_PROFILE_API, nil)
+	req, err := http.NewRequest("GET", OauthProfileAPI, nil)
 	if err != nil {
 		log.Fatalf("error creating auth request %v", err)
 	}
@@ -84,12 +89,12 @@ func (h *GoogleOauthHandler) Callback(w http.ResponseWriter, r *http.Request) {
 		log.Fatalf("error reading user data %v", err)
 	}
 
-    userData := &model.UserDTO{}
-	if err := json.Unmarshal(data, userData); err != nil {
+	profile := &OauthProfileData{}
+	if err := json.Unmarshal(data, profile); err != nil {
 		log.Fatalf("error parsing user data %v", err)
 	}
 
-	userID, err := h.userService.CreateUser(r.Context(), userData)
+	userID, err := h.userService.CreateUser(r.Context(), profile.Sub, profile.Email, profile.Name)
 	if err := h.sessionManager.RenewToken(r.Context()); err != nil {
 		log.Fatalf("error renewing session token %v", err)
 	}

@@ -3,9 +3,9 @@
 
 # Features  
 - [x] Sign in with Google Oath
-- [ ] Show user's feeds
+- [x] Show user's feeds
 - [ ] Display contents of a single feed
-- [ ] Add a feed from a rss/atom url, giving it a name and an update interval
+- [x] Add a feed from a rss/atom url, giving it a name and an update interval
 - [ ] Delete a feed
 - [ ] Edit the name of a feed.
 - [ ] Bookmark a feed
