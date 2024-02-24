@@ -1,7 +1,7 @@
 // this file is obtained from
 // https://github.com/SlyMarbo/rss/blob/master/time.go
 
-package utils
+package util
 
 import (
 	"log"

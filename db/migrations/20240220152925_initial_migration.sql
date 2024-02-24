@@ -25,7 +25,7 @@ CREATE TABLE feed_items (
     content         TEXT,
     item_updated    TIMESTAMPTZ,
     item_published  TIMESTAMPTZ,
-    feed_id         INTEGER,
+    feed_id         INTEGER NOT NULL,
 
     FOREIGN KEY(feed_id) REFERENCES feeds(id) ON DELETE CASCADE
 );

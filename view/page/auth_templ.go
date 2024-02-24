@@ -11,8 +11,8 @@ import "io"
 import "bytes"
 import "strings"
 
-import "github.com/michaelcosj/pluto-reader/views/layouts"
-import "github.com/michaelcosj/pluto-reader/views/components"
+import "github.com/michaelcosj/pluto-reader/view/layout"
+import "github.com/michaelcosj/pluto-reader/view/component"
 
 func googleSignInButton() templ.CSSClass {
 	var templ_7745c5c3_CSSBuilder strings.Builder

@@ -1,25 +1,32 @@
-package handlers
+package handler
 
 import (
 	"log"
 	"net/http"
 	"net/url"
 
-	"github.com/michaelcosj/pluto-reader/parser"
-	"github.com/michaelcosj/pluto-reader/util"
-	"github.com/michaelcosj/pluto-reader/view/component"
+	"github.com/alexedwards/scs/v2"
+	"github.com/michaelcosj/pluto-reader/service"
 )
 
 type FeedsHandler struct {
+	feedService    *service.FeedService
+	userService    *service.UserService
+	sessionManager *scs.SessionManager
 }
 
-func Feeds() *FeedsHandler {
-	return &FeedsHandler{}
+func Feeds(feedService *service.FeedService, userService *service.UserService, sessionManager *scs.SessionManager) *FeedsHandler {
+	return &FeedsHandler{feedService, userService, sessionManager}
 }
 
 func (h *FeedsHandler) AddFeed(w http.ResponseWriter, r *http.Request) {
-	link := r.FormValue("link")
-	_, err := url.ParseRequestURI(link)
+	userID := h.sessionManager.GetInt32(r.Context(), "userID")
+	if userID == 0 {
+		log.Fatalf("user not authenticated\n")
+	}
+
+	feedUrl := r.FormValue("url")
+	_, err := url.ParseRequestURI(feedUrl)
 	if err != nil {
 		log.Fatalf("error parsing url: %v\n", err)
 	}
@@ -29,18 +36,15 @@ func (h *FeedsHandler) AddFeed(w http.ResponseWriter, r *http.Request) {
 		log.Fatalf("invalid feed name: %s\n", feedName)
 	}
 
-	data, err := utils.Fetch(link)
+	feedID, err := h.feedService.ParseAndCreateFeed(r.Context(), feedUrl)
 	if err != nil {
-		log.Fatalf("error fetching url %s: %v\n", link, err)
+		log.Fatalf("error creating feed: %v\n", err)
 	}
 
-	feed, err := parser.Parse(data)
+	err = h.userService.AddFeedToUser(r.Context(), userID, feedID, feedName)
 	if err != nil {
-		log.Fatalf("error parsing feed data: %v\n", err)
+		log.Fatalf("error adding feed to user: %v\n", err)
 	}
 
-	cardComponent := components.Card(feed.Title, feed.Description, feed.FeedLink)
-	cardComponent.Render(r.Context(), w)
-
-    // TODO: save feed in the database
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

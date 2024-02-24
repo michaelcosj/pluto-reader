@@ -26,7 +26,7 @@ type FeedItem struct {
 	Content       pgtype.Text
 	ItemUpdated   pgtype.Timestamptz
 	ItemPublished pgtype.Timestamptz
-	FeedID        pgtype.Int4
+	FeedID        int32
 }
 
 type User struct {
@@ -40,7 +40,7 @@ type UserFeed struct {
 	ID             int32
 	UserID         int32
 	FeedID         int32
-	FeedName       pgtype.Text
+	FeedName       string
 	LastUpdated    pgtype.Timestamptz
 	UpdateInterval pgtype.Interval
 }

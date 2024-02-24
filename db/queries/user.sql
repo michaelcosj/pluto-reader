@@ -1,24 +1,41 @@
--- name: GetUserByID :one
+-- name: UserGetByID :one
 SELECT * FROM users
 WHERE id = $1 LIMIT 1;
 
--- name: GetUserByOauthSub :one
+-- name: UserGetByOauthSub :one
 SELECT * FROM users
 WHERE oauth_sub = $1 LIMIT 1;
 
--- name: CreateUser :one
+-- name: UserCreate :one
 INSERT INTO users (
   oauth_sub, email, name
 ) VALUES (
   $1, $2, $3
 )
-RETURNING *;
+RETURNING id;
 
--- name: UpdateUser :exec
+-- name: UserUpdate :exec
 UPDATE users
   set name = $2
 WHERE id = $1;
 
--- name: DeleteUser :exec
+-- name: UserDelete :exec
 DELETE FROM users
 WHERE id = $1;
+
+-- name: UserAddFeed :exec
+INSERT INTO user_feeds (
+    user_id, feed_id,
+    feed_name, update_interval
+) VALUES (
+    $1, $2, $3, $4
+);
+
+
+-- name: UserAddFeedItems :copyfrom
+INSERT INTO user_feed_items (
+    user_id, item_id
+) VALUES (
+    $1, $2
+);
+

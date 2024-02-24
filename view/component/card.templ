@@ -2,7 +2,7 @@ package components
 
 import "github.com/michaelcosj/pluto-reader/model"
 
-templ CardList(feed *models.FeedDTO) {
+templ CardList(feed *model.FeedDTO) {
 	for _, v := range feed.Items {
 		if v != nil {
 			@Card(v.Title, v.Summary, v.Link)

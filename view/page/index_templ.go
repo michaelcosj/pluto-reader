@@ -10,8 +10,8 @@ import "context"
 import "io"
 import "bytes"
 
-import "github.com/michaelcosj/pluto-reader/views/layouts"
-import "github.com/michaelcosj/pluto-reader/views/components"
+import "github.com/michaelcosj/pluto-reader/view/layout"
+import "github.com/michaelcosj/pluto-reader/view/component"
 
 func Index() templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
@@ -42,7 +42,7 @@ func Index() templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <section class=\"px-16 py-12\"><div class=\"grid grid-cols-2\"><div class=\"flex flex-col gap-5\"><h1 class=\"text-2xl\">Input an atom link</h1><form hx-post=\"/feed/new\" hx-target=\"[hx-feed-container]\" hx-swap=\"innerHTML\"><div class=\"flex flex-col items-center gap-2\"><div class=\"control\"><input class=\"rounded\" type=\"text\" name=\"link\" placeholder=\"Atom feed link\"></div><div class=\"control\"><input class=\"rounded\" type=\"text\" name=\"name\" placeholder=\"Feed name\"></div><button class=\"bg-primary px-3 py-2 text-background rounded\" type=\"submit\">Fetch</button></div></form></div><div class=\"px-3 overflow-auto h-screen\" hx-feed-container><!-- feed items are displayed here --></div></div></section>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <section class=\"py-12\"><div class=\"grid grid-cols-2\"><div class=\"flex flex-col gap-5 items-center\"><h1 class=\"text-2xl\">Input an atom link</h1><form hx-post=\"/feed/new\" hx-target=\"[hx-feed-container]\" hx-swap=\"innerHTML\"><div class=\"flex flex-col items-center gap-2\"><div class=\"control\"><input class=\"rounded\" type=\"text\" name=\"url\" placeholder=\"Atom feed link\"></div><div class=\"control\"><input class=\"rounded\" type=\"text\" name=\"name\" placeholder=\"Feed name\"></div><button class=\"bg-primary px-3 py-2 text-background rounded\" type=\"submit\">Fetch</button></div></form></div><div class=\"px-3 overflow-auto h-screen\" hx-feed-container><!-- feed items are displayed here --></div></div></section>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

@@ -1,4 +1,4 @@
-package models
+package model
 
 type UserDTO struct {
 	Email    string `json:"email"`

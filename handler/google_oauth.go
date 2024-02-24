@@ -1,4 +1,4 @@
-package handlers
+package handler
 
 import (
 	"encoding/json"
@@ -21,11 +21,11 @@ const GOOGLE_USER_PROFILE_API = "https://www.googleapis.com/oauth2/v2/userinfo"
 
 type GoogleOauthHandler struct {
 	oauthConfig    *oauth2.Config
-	userService    *services.UsersService
+	userService    *service.UserService
 	sessionManager *scs.SessionManager
 }
 
-func GoogleOauth(service *services.UsersService, sessionManager *scs.SessionManager) *GoogleOauthHandler {
+func GoogleOauth(service *service.UserService, sessionManager *scs.SessionManager) *GoogleOauthHandler {
 	config := &oauth2.Config{
 		ClientID:     os.Getenv("GOOGLE_OAUTH_CLIENT_ID"),
 		ClientSecret: os.Getenv("GOOGLE_OAUTH_CLIENT_SECRET"),
@@ -41,13 +41,13 @@ func GoogleOauth(service *services.UsersService, sessionManager *scs.SessionMana
 }
 
 func (h *GoogleOauthHandler) Index(w http.ResponseWriter, r *http.Request) {
-    fmt.Printf("hello?")
+	fmt.Printf("hello?")
 	authPage := pages.Auth()
 	authPage.Render(r.Context(), w)
 }
 
 func (h *GoogleOauthHandler) SignIn(w http.ResponseWriter, r *http.Request) {
-	state := utils.GenerateRandomString(5)
+	state := util.GenerateRandomString(5)
 	h.sessionManager.Put(r.Context(), "state", state)
 
 	url := h.oauthConfig.AuthCodeURL(state)
@@ -64,36 +64,36 @@ func (h *GoogleOauthHandler) Callback(w http.ResponseWriter, r *http.Request) {
 	code := r.URL.Query().Get("code")
 	token, err := h.oauthConfig.Exchange(r.Context(), code)
 	if err != nil {
-		log.Fatalf("error exchanging code %w", err)
+		log.Fatalf("error exchanging code %v", err)
 	}
 
 	client := http.Client{}
 	req, err := http.NewRequest("GET", GOOGLE_USER_PROFILE_API, nil)
 	if err != nil {
-		log.Fatalf("error creating auth request %w", err)
+		log.Fatalf("error creating auth request %v", err)
 	}
 
 	req.Header.Add("Authorization", "Bearer "+token.AccessToken)
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatalf("error retrieving user data %w", err)
+		log.Fatalf("error retrieving user data %v", err)
 	}
 
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatalf("error reading user data %w", err)
+		log.Fatalf("error reading user data %v", err)
 	}
 
-	var userData models.UserDTO
-	if err := json.Unmarshal(data, &userData); err != nil {
-		log.Fatalf("error parsing user data %w", err)
+    userData := &model.UserDTO{}
+	if err := json.Unmarshal(data, userData); err != nil {
+		log.Fatalf("error parsing user data %v", err)
 	}
 
-	user, err := h.userService.CreateUser(r.Context(), userData)
+	userID, err := h.userService.CreateUser(r.Context(), userData)
 	if err := h.sessionManager.RenewToken(r.Context()); err != nil {
-		log.Fatalf("error renewing session token %w", err)
+		log.Fatalf("error renewing session token %v", err)
 	}
-	h.sessionManager.Put(r.Context(), "userID", user.ID)
+	h.sessionManager.Put(r.Context(), "userID", userID)
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

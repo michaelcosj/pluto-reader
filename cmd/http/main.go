@@ -40,20 +40,22 @@ func main() {
 	defer dbConn.Close(ctx)
 
 	queries := repository.New(dbConn)
-	usersService := services.Users(queries)
 
-	indexHandler := handlers.Index()
+	usersService := service.User(queries)
+	feedService := service.Feed(queries)
+
+	indexHandler := handler.Index()
 	r.Get("/", indexHandler.ShowIndexPage)
 	r.Post("/getfeed", indexHandler.GetFeed)
 
-	googleOauthHandler := handlers.GoogleOauth(usersService, sessionManager)
+	googleOauthHandler := handler.GoogleOauth(usersService, sessionManager)
 	r.Route("/auth", func(r chi.Router) {
 		r.Get("/", googleOauthHandler.Index)
 		r.Get("/signin", googleOauthHandler.SignIn)
 		r.Get("/callback", googleOauthHandler.Callback)
 	})
 
-	feedsHandler := handlers.Feeds()
+	feedsHandler := handler.Feeds(feedService, usersService, sessionManager)
 	r.Route("/feed", func(r chi.Router) {
 		r.Post("/new", feedsHandler.AddFeed)
 	})

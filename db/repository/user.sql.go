@@ -7,52 +7,80 @@ package repository
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const createUser = `-- name: CreateUser :one
+const userAddFeed = `-- name: UserAddFeed :exec
+INSERT INTO user_feeds (
+    user_id, feed_id,
+    feed_name, update_interval
+) VALUES (
+    $1, $2, $3, $4
+)
+`
+
+type UserAddFeedParams struct {
+	UserID         int32
+	FeedID         int32
+	FeedName       string
+	UpdateInterval pgtype.Interval
+}
+
+func (q *Queries) UserAddFeed(ctx context.Context, arg UserAddFeedParams) error {
+	_, err := q.db.Exec(ctx, userAddFeed,
+		arg.UserID,
+		arg.FeedID,
+		arg.FeedName,
+		arg.UpdateInterval,
+	)
+	return err
+}
+
+type UserAddFeedItemsParams struct {
+	UserID int32
+	ItemID int32
+}
+
+const userCreate = `-- name: UserCreate :one
 INSERT INTO users (
   oauth_sub, email, name
 ) VALUES (
   $1, $2, $3
 )
-RETURNING id, oauth_sub, email, name
+RETURNING id
 `
 
-type CreateUserParams struct {
+type UserCreateParams struct {
 	OauthSub string
 	Email    string
 	Name     string
 }
 
-func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
-	row := q.db.QueryRow(ctx, createUser, arg.OauthSub, arg.Email, arg.Name)
-	var i User
-	err := row.Scan(
-		&i.ID,
-		&i.OauthSub,
-		&i.Email,
-		&i.Name,
-	)
-	return i, err
+func (q *Queries) UserCreate(ctx context.Context, arg UserCreateParams) (int32, error) {
+	row := q.db.QueryRow(ctx, userCreate, arg.OauthSub, arg.Email, arg.Name)
+	var id int32
+	err := row.Scan(&id)
+	return id, err
 }
 
-const deleteUser = `-- name: DeleteUser :exec
+const userDelete = `-- name: UserDelete :exec
 DELETE FROM users
 WHERE id = $1
 `
 
-func (q *Queries) DeleteUser(ctx context.Context, id int32) error {
-	_, err := q.db.Exec(ctx, deleteUser, id)
+func (q *Queries) UserDelete(ctx context.Context, id int32) error {
+	_, err := q.db.Exec(ctx, userDelete, id)
 	return err
 }
 
-const getUserByID = `-- name: GetUserByID :one
+const userGetByID = `-- name: UserGetByID :one
 SELECT id, oauth_sub, email, name FROM users
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetUserByID(ctx context.Context, id int32) (User, error) {
-	row := q.db.QueryRow(ctx, getUserByID, id)
+func (q *Queries) UserGetByID(ctx context.Context, id int32) (User, error) {
+	row := q.db.QueryRow(ctx, userGetByID, id)
 	var i User
 	err := row.Scan(
 		&i.ID,
@@ -63,13 +91,13 @@ func (q *Queries) GetUserByID(ctx context.Context, id int32) (User, error) {
 	return i, err
 }
 
-const getUserByOauthSub = `-- name: GetUserByOauthSub :one
+const userGetByOauthSub = `-- name: UserGetByOauthSub :one
 SELECT id, oauth_sub, email, name FROM users
 WHERE oauth_sub = $1 LIMIT 1
 `
 
-func (q *Queries) GetUserByOauthSub(ctx context.Context, oauthSub string) (User, error) {
-	row := q.db.QueryRow(ctx, getUserByOauthSub, oauthSub)
+func (q *Queries) UserGetByOauthSub(ctx context.Context, oauthSub string) (User, error) {
+	row := q.db.QueryRow(ctx, userGetByOauthSub, oauthSub)
 	var i User
 	err := row.Scan(
 		&i.ID,
@@ -80,18 +108,18 @@ func (q *Queries) GetUserByOauthSub(ctx context.Context, oauthSub string) (User,
 	return i, err
 }
 
-const updateUser = `-- name: UpdateUser :exec
+const userUpdate = `-- name: UserUpdate :exec
 UPDATE users
   set name = $2
 WHERE id = $1
 `
 
-type UpdateUserParams struct {
+type UserUpdateParams struct {
 	ID   int32
 	Name string
 }
 
-func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) error {
-	_, err := q.db.Exec(ctx, updateUser, arg.ID, arg.Name)
+func (q *Queries) UserUpdate(ctx context.Context, arg UserUpdateParams) error {
+	_, err := q.db.Exec(ctx, userUpdate, arg.ID, arg.Name)
 	return err
 }

@@ -1,4 +1,4 @@
-package handlers
+package handler
 
 import (
 	"context"
@@ -29,7 +29,7 @@ func (h *IndexHandler) GetFeed(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data, err := utils.Fetch(link)
+	data, err := util.Fetch(link)
 	if err != nil {
 		log.Fatalf("error fetching url, %v\n", err)
 		return

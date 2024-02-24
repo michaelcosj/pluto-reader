@@ -4,7 +4,7 @@ CREATE TABLE user_feeds (
     id              INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     user_id         INTEGER NOT NULL,
     feed_id         INTEGER NOT NULL,
-    feed_name       VARCHAR(255),
+    feed_name       VARCHAR(255) NOT NULL,
     last_updated    TIMESTAMPTZ,
     update_interval INTERVAL NOT NULL,
 

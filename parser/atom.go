@@ -55,16 +55,16 @@ type atomFeed struct {
 	Entries  []atomEntry `xml:"entry"`
 }
 
-func parseAtom(data []byte) (*models.FeedDTO, error) {
+func parseAtom(data []byte) (*model.FeedDTO, error) {
 	var feed atomFeed
 	if err := xml.Unmarshal(data, &feed); err != nil {
 		return nil, err
 	}
 
-	res := &models.FeedDTO{
+	res := &model.FeedDTO{
 		Title:        feed.Title,
 		Description:  feed.Subtitle,
-		Items:        make([]*models.FeedItem, len(feed.Entries)-1),
+		Items:        make([]*model.FeedItem, len(feed.Entries)-1),
 		ItemCheckMap: make(map[string]struct{}),
 	}
 
@@ -82,7 +82,7 @@ func parseAtom(data []byte) (*models.FeedDTO, error) {
 			continue
 		}
 
-		item := &models.FeedItem{
+		item := &model.FeedItem{
 			Title:       entry.Title,
 			Summary:     entry.Summary,
 			Content:     entry.Content.Raw,
@@ -95,7 +95,7 @@ func parseAtom(data []byte) (*models.FeedDTO, error) {
 			if link.Rel == "alternate" || link.Rel == "" {
 				item.Link = link.Href
 			} else if link.Rel == "enclosure" {
-				item.Enclosures = append(item.Enclosures, models.FeedEnclosure{
+				item.Enclosures = append(item.Enclosures, model.FeedEnclosure{
 					Type:   link.Type,
 					Href:   link.Href,
 					Length: link.Length,
@@ -105,7 +105,7 @@ func parseAtom(data []byte) (*models.FeedDTO, error) {
 
 		if entry.Updated != "" {
 			var err error
-			item.Date, err = utils.ParseTime(entry.Updated)
+			item.Date, err = util.ParseTime(entry.Updated)
 			if err != nil {
 				item.IsDateValid = false
 				log.Printf("error parsing date: %s\n", entry.Updated)
