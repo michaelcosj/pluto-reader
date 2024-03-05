@@ -18,15 +18,14 @@ type Feed struct {
 }
 
 type FeedItem struct {
-	ID            int32
-	EntryID       pgtype.Text
-	Title         pgtype.Text
-	Summary       pgtype.Text
-	Link          string
-	Content       pgtype.Text
-	ItemUpdated   pgtype.Timestamptz
-	ItemPublished pgtype.Timestamptz
-	FeedID        int32
+	ID       int32
+	EntryID  pgtype.Text
+	Title    pgtype.Text
+	Summary  pgtype.Text
+	Link     string
+	Content  pgtype.Text
+	ItemDate pgtype.Timestamptz
+	FeedID   int32
 }
 
 type User struct {

@@ -1,13 +1,13 @@
-package components
+package component
 
 import "github.com/michaelcosj/pluto-reader/view/icon"
 
 templ Sidebar() {
 	<div class="sidebar-container">
-		<div class="z-50 sidebar absolute top-0 left-0 h-screen w-16 bg-accent text-background py-2 px-4 transition-all duration-300 delay-75 ease-in">
+		<div class="z-50 sidebar absolute top-0 left-0 h-screen w-16 bg-primary text-background py-2 px-4 transition-all duration-300 delay-75 ease-in">
 			<div class="top">
 				<div class="logo h-12 w-full flex gap-1.5 items-center opacity-0">
-					@icons.Atom()
+					@icon.Atom()
 					<span class="inline-block">
 						<p class="text-lg">Pluto Reader</p>
 					</span>
@@ -17,20 +17,20 @@ templ Sidebar() {
 					type="button"
 					class="absolute top-5 left-1/2 -translate-x-1/2 inline-flex justify-center items-center px-0.5 py-0.5 rounded hover:text-accent hover:bg-background transition-all delay-75 duration-200"
 				>
-					@icons.Atom()
+					@icon.Atom()
 				</button>
 				<button
 					id="sidebar-close-btn"
 					type="button"
 					class="absolute top-5 left-[88%] -translate-x-1/2 hidden inline-flex justify-center items-center px-0.5 py-0.5 rounded hover:text-accent hover:bg-background transition-all delay-300 duration-200"
 				>
-					@icons.ChevronLeft()
+					@icon.ChevronLeft()
 				</button>
 			</div>
 			<ul class="menu my-12 transition-all delay-200 duration-700">
 				<li class="my-4 h-12 w-[90%] relative group">
 					<a href="#" class="flex gap-1.5 items-center px-0.5 py-1 rounded hover:text-accent hover:bg-background">
-						@icons.BellDot()
+						@icon.BellDot()
 						<span class="inline-block">
 							<p>Unread</p>
 						</span>
@@ -39,7 +39,7 @@ templ Sidebar() {
 				</li>
 				<li class="my-4 h-12 w-[90%] relative group">
 					<a href="#" class="flex gap-1.5 items-center px-0.5 py-1 rounded hover:text-accent hover:bg-background">
-						@icons.RSS()
+						@icon.RSS()
 						<span class="inline-block">
 							<p>All</p>
 						</span>
@@ -48,7 +48,7 @@ templ Sidebar() {
 				</li>
 				<li class="my-4 h-12 w-[90%] relative group">
 					<a href="#" class="flex gap-1.5 items-center px-0.5 py-1 rounded hover:text-accent hover:bg-background">
-						@icons.Bookmark()
+						@icon.Bookmark()
 						<span class="inline-block">
 							<p>Bookmarks</p>
 						</span>
@@ -57,7 +57,7 @@ templ Sidebar() {
 				</li>
 				<li class="my-4 h-12 w-[90%] relative group">
 					<div class="flex gap-1.5 items-center px-0.5 py-1 rounded hover:text-accent hover:bg-background">
-						@icons.Library()
+						@icon.Library()
 						<span class="inline-block">
 							<p>Collections</p>
 						</span>
@@ -66,7 +66,7 @@ templ Sidebar() {
 				</li>
 			</ul>
 		</div>
-		<div class="main-content relative transition-all delay-100 duration-500 ">
+		<div class="main-content relative transition-all delay-100 duration-500 h-screen">
 			{ children... }
 		</div>
 	</div>

@@ -41,12 +41,22 @@ INSERT INTO user_feed_items (
 
 -- name: UserGetFeedItems :many
 SELECT
-	fi.id, fi.entry_id, fi.title,
-    fi.summary, fi.link, fi.item_updated,
-    fi.feed_id, ufi.is_read
+	fi.id, fi.title, fi.summary,
+    fi.link, fi.item_date, fi.content,
+    ufi.is_read, uf.feed_name
 FROM
 	feed_items fi
+JOIN user_feeds uf on 
+    (uf.feed_id = fi.feed_id)
 JOIN user_feed_items ufi on
 	(ufi.item_id = fi.id)
 WHERE
 	ufi.user_id = $1;
+
+-- name: UserGetFeedItemContent :one
+SELECT fi.content FROM
+    feed_items fi
+JOIN user_feed_items ufi on
+	(ufi.user_id = $1)
+WHERE 
+    fi.id = $2;

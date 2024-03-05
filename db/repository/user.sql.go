@@ -108,13 +108,36 @@ func (q *Queries) UserGetByOauthSub(ctx context.Context, oauthSub string) (User,
 	return i, err
 }
 
+const userGetFeedItemContent = `-- name: UserGetFeedItemContent :one
+SELECT fi.content FROM
+    feed_items fi
+JOIN user_feed_items ufi on
+	(ufi.user_id = $1)
+WHERE 
+    fi.id = $2
+`
+
+type UserGetFeedItemContentParams struct {
+	UserID int32
+	ID     int32
+}
+
+func (q *Queries) UserGetFeedItemContent(ctx context.Context, arg UserGetFeedItemContentParams) (pgtype.Text, error) {
+	row := q.db.QueryRow(ctx, userGetFeedItemContent, arg.UserID, arg.ID)
+	var content pgtype.Text
+	err := row.Scan(&content)
+	return content, err
+}
+
 const userGetFeedItems = `-- name: UserGetFeedItems :many
 SELECT
-	fi.id, fi.entry_id, fi.title,
-    fi.summary, fi.link, fi.item_updated,
-    fi.feed_id, ufi.is_read
+	fi.id, fi.title, fi.summary,
+    fi.link, fi.item_date, fi.content,
+    ufi.is_read, uf.feed_name
 FROM
 	feed_items fi
+JOIN user_feeds uf on 
+    (uf.feed_id = fi.feed_id)
 JOIN user_feed_items ufi on
 	(ufi.item_id = fi.id)
 WHERE
@@ -122,14 +145,14 @@ WHERE
 `
 
 type UserGetFeedItemsRow struct {
-	ID          int32
-	EntryID     pgtype.Text
-	Title       pgtype.Text
-	Summary     pgtype.Text
-	Link        string
-	ItemUpdated pgtype.Timestamptz
-	FeedID      int32
-	IsRead      pgtype.Bool
+	ID       int32
+	Title    pgtype.Text
+	Summary  pgtype.Text
+	Link     string
+	ItemDate pgtype.Timestamptz
+	Content  pgtype.Text
+	IsRead   pgtype.Bool
+	FeedName string
 }
 
 func (q *Queries) UserGetFeedItems(ctx context.Context, userID int32) ([]UserGetFeedItemsRow, error) {
@@ -143,13 +166,13 @@ func (q *Queries) UserGetFeedItems(ctx context.Context, userID int32) ([]UserGet
 		var i UserGetFeedItemsRow
 		if err := rows.Scan(
 			&i.ID,
-			&i.EntryID,
 			&i.Title,
 			&i.Summary,
 			&i.Link,
-			&i.ItemUpdated,
-			&i.FeedID,
+			&i.ItemDate,
+			&i.Content,
 			&i.IsRead,
+			&i.FeedName,
 		); err != nil {
 			return nil, err
 		}

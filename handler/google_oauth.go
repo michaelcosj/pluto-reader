@@ -47,7 +47,7 @@ func GoogleOauth(service *service.UserService, sessionManager *scs.SessionManage
 
 func (h *GoogleOauthHandler) Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("hello?")
-	authPage := pages.Auth()
+	authPage := page.Auth()
 	authPage.Render(r.Context(), w)
 }
 

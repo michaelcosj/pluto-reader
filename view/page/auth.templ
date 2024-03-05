@@ -1,4 +1,4 @@
-package pages
+package page
 
 import "github.com/michaelcosj/pluto-reader/view/layout"
 import "github.com/michaelcosj/pluto-reader/view/component"
@@ -22,12 +22,12 @@ css googleSignInButton() {
 
 templ Auth() {
 	@layouts.Page("Sign In") {
-		@components.Header()
-		<section class="w-screen h-screen flex justify-center items-center">
-			<div class="level">
+		@component.Header()
+		<section class="w-screen h-[80vh] flex justify-center items-center">
+			<div>
 				<a
 					href="/auth/signin"
-					class={"hover:shadow-md active:bg-[#eeeeee]", googleSignInButton()}
+					class={ "hover:shadow-md active:bg-[#eeeeee]", googleSignInButton() }
 				>Sign In with Google</a>
 			</div>
 		</section>

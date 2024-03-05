@@ -10,7 +10,7 @@ CREATE TABLE users (
 CREATE TABLE feeds (
     id              INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     title           VARCHAR(255),
-    description     VARCHAR(255),
+    description     TEXT,
     site_link       VARCHAR(255),
     feed_link       VARCHAR(255) UNIQUE NOT NULL,
     last_refreshed  TIMESTAMPTZ 
@@ -23,8 +23,7 @@ CREATE TABLE feed_items (
     summary         VARCHAR(255),
     link            VARCHAR(255) UNIQUE NOT NULL,
     content         TEXT,
-    item_updated    TIMESTAMPTZ,
-    item_published  TIMESTAMPTZ,
+    item_date       TIMESTAMPTZ,
     feed_id         INTEGER NOT NULL,
 
     FOREIGN KEY(feed_id) REFERENCES feeds(id) ON DELETE CASCADE

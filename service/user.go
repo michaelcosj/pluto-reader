@@ -5,13 +5,14 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"html"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/michaelcosj/pluto-reader/db/repository"
 )
 
-type UserFeedItems []repository.UserGetFeedItemsRow
+type UserFeedItem repository.UserGetFeedItemsRow
 
 type UserService struct {
 	queries *repository.Queries
@@ -84,11 +85,28 @@ func (s *UserService) AddFeedToUser(ctx context.Context, userID, feedID int32, f
 	return nil
 }
 
-func (s *UserService) GetUserFeedItems(ctx context.Context, userId int32) (UserFeedItems, error) {
+func (s *UserService) GetUserFeedItems(ctx context.Context, userId int32) ([]UserFeedItem, error) {
 	items, err := s.queries.UserGetFeedItems(ctx, userId)
 	if err != nil {
 		return nil, fmt.Errorf("error getting user feed items: %w", err)
 	}
 
-	return UserFeedItems(items), nil
+	userFeedItems := []UserFeedItem{}
+	for _, v := range items {
+		userFeedItems = append(userFeedItems, UserFeedItem(v))
+	}
+
+    fmt.Printf("%s\n", html.UnescapeString(userFeedItems[0].Content.String))
+    fmt.Printf("%s\n", "<div>Hello</div>")
+
+	return userFeedItems, nil
+}
+
+func (s *UserService) GetUserFeedContent(ctx context.Context, userID int32, feedID int32) (string, error) {
+	content, err := s.queries.UserGetFeedItemContent(ctx, repository.UserGetFeedItemContentParams{UserID: userID, ID: feedID})
+    if err != nil {
+        return "", fmt.Errorf("error getting feed content: %w", err)
+    }
+
+    return content.String, nil
 }

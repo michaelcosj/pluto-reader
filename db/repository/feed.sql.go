@@ -12,14 +12,13 @@ import (
 )
 
 type FeedAddItemsParams struct {
-	EntryID       pgtype.Text
-	Title         pgtype.Text
-	Summary       pgtype.Text
-	Link          string
-	Content       pgtype.Text
-	ItemUpdated   pgtype.Timestamptz
-	ItemPublished pgtype.Timestamptz
-	FeedID        int32
+	EntryID  pgtype.Text
+	Title    pgtype.Text
+	Summary  pgtype.Text
+	Link     string
+	Content  pgtype.Text
+	ItemDate pgtype.Timestamptz
+	FeedID   int32
 }
 
 const feedCreate = `-- name: FeedCreate :one
@@ -52,7 +51,7 @@ func (q *Queries) FeedCreate(ctx context.Context, arg FeedCreateParams) (int32, 
 }
 
 const feedGetItems = `-- name: FeedGetItems :many
-SELECT id, entry_id, title, summary, link, content, item_updated, item_published, feed_id FROM feed_items
+SELECT id, entry_id, title, summary, link, content, item_date, feed_id FROM feed_items
 WHERE feed_id = $1
 `
 
@@ -72,8 +71,7 @@ func (q *Queries) FeedGetItems(ctx context.Context, feedID int32) ([]FeedItem, e
 			&i.Summary,
 			&i.Link,
 			&i.Content,
-			&i.ItemUpdated,
-			&i.ItemPublished,
+			&i.ItemDate,
 			&i.FeedID,
 		); err != nil {
 			return nil, err

@@ -2,6 +2,7 @@ package parser
 
 import (
 	"encoding/xml"
+	"html/template"
 	"log"
 
 	"github.com/michaelcosj/pluto-reader/util"
@@ -77,15 +78,15 @@ func parseAtom(data []byte) (*Feed, error) {
 
 	for _, entry := range feed.Entries {
 		if _, ok := res.ItemCheckMap[entry.ID]; ok {
-			log.Printf("Item %s has duplicate id: %s\n", entry.Title, entry.Updated)
+			log.Printf("Item %s has duplicate id: %s\n", entry.Title, entry.ID)
 			continue
 		}
 
 		item := &FeedItem{
 			Title:       entry.Title,
 			Summary:     entry.Summary,
-			Content:     entry.Content.Raw,
-			EntryID:      entry.ID,
+			Content:     template.HTML(entry.Content.Raw),
+			EntryID:     entry.ID,
 			IsRead:      false,
 			IsDateValid: true,
 		}

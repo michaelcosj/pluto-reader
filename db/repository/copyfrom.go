@@ -34,8 +34,7 @@ func (r iteratorForFeedAddItems) Values() ([]interface{}, error) {
 		r.rows[0].Summary,
 		r.rows[0].Link,
 		r.rows[0].Content,
-		r.rows[0].ItemUpdated,
-		r.rows[0].ItemPublished,
+		r.rows[0].ItemDate,
 		r.rows[0].FeedID,
 	}, nil
 }
@@ -45,7 +44,7 @@ func (r iteratorForFeedAddItems) Err() error {
 }
 
 func (q *Queries) FeedAddItems(ctx context.Context, arg []FeedAddItemsParams) (int64, error) {
-	return q.db.CopyFrom(ctx, []string{"feed_items"}, []string{"entry_id", "title", "summary", "link", "content", "item_updated", "item_published", "feed_id"}, &iteratorForFeedAddItems{rows: arg})
+	return q.db.CopyFrom(ctx, []string{"feed_items"}, []string{"entry_id", "title", "summary", "link", "content", "item_date", "feed_id"}, &iteratorForFeedAddItems{rows: arg})
 }
 
 // iteratorForUserAddFeedItems implements pgx.CopyFromSource.

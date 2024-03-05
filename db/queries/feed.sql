@@ -13,10 +13,10 @@ RETURNING id;
 
 -- name: FeedAddItems :copyfrom
 INSERT INTO feed_items (
-    entry_id, title, summary,
-    link, content, item_updated,
-    item_published, feed_id
+    entry_id, title, summary, link,
+    content, item_date, feed_id
 ) VALUES (
     $1, $2, $3, $4,
-    $5, $6, $7, $8 
+    $5, $6, $7 
 );
+

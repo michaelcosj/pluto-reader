@@ -46,13 +46,13 @@ func (s *FeedService) ParseAndCreateFeed(ctx context.Context, feedUrl string) (i
 	for _, item := range feedModel.Items {
 		if item != nil {
 			itemsParams = append(itemsParams, repository.FeedAddItemsParams{
-				Link:        item.Link,
-				FeedID:      feedID,
-				EntryID:     pgtype.Text{String: item.EntryID, Valid: true},
-				Title:       pgtype.Text{String: item.Title, Valid: true},
-				Summary:     pgtype.Text{String: item.Summary, Valid: true},
-				Content:     pgtype.Text{String: item.Content, Valid: true},
-				ItemUpdated: pgtype.Timestamptz{Time: item.Date, Valid: item.IsDateValid},
+				Link:     item.Link,
+				FeedID:   feedID,
+				EntryID:  pgtype.Text{String: item.EntryID, Valid: true},
+				Title:    pgtype.Text{String: item.Title, Valid: true},
+				Summary:  pgtype.Text{String: item.Summary, Valid: true},
+				Content:  pgtype.Text{String: string(item.Content), Valid: true},
+				ItemDate: pgtype.Timestamptz{Time: item.Date, Valid: item.IsDateValid},
 			})
 		}
 	}
@@ -70,6 +70,7 @@ func fetchData(url string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	if res.StatusCode != 200 {
 		return nil, fmt.Errorf(res.Status)
 	}

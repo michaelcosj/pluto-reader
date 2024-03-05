@@ -35,7 +35,7 @@ func main() {
 	ctx := context.Background()
 	dbConn, err := pgx.Connect(ctx, os.Getenv("PG_DSN"))
 	if err != nil {
-		log.Fatalf("error connecting to database: %w", err)
+		log.Fatalf("error connecting to database: %v", err)
 	}
 	defer dbConn.Close(ctx)
 
@@ -44,7 +44,7 @@ func main() {
 	usersService := service.User(queries)
 	feedService := service.Feed(queries)
 
-	indexHandler := handler.Index()
+	indexHandler := handler.Index(sessionManager)
 	r.Get("/", indexHandler.ShowIndexPage)
 
 	googleOauthHandler := handler.GoogleOauth(usersService, sessionManager)

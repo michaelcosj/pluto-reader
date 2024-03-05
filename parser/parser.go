@@ -1,6 +1,9 @@
 package parser
 
-import "time"
+import (
+	"html/template"
+	"time"
+)
 
 type FeedEnclosure struct {
 	Type   string
@@ -11,11 +14,11 @@ type FeedEnclosure struct {
 type FeedItem struct {
 	ID          int
 	IsRead      bool
-	EntryID      string
+	EntryID     string
 	Title       string
 	Summary     string
 	Link        string
-	Content     string
+	Content     template.HTML
 	Date        time.Time
 	IsDateValid bool
 	Enclosures  []FeedEnclosure

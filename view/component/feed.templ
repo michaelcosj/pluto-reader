@@ -1,0 +1,70 @@
+package component
+
+import "github.com/michaelcosj/pluto-reader/service"
+import "github.com/michaelcosj/pluto-reader/view/icon"
+import "fmt"
+import "html"
+
+templ FeedItemList(items []service.UserFeedItem) {
+	<div class="px-3 flex flex-col items-start gap-2 grid grid-cols-1 md:grid-cols-4">
+		for _, item := range items {
+			@feedItem(item)
+		}
+	</div>
+}
+
+templ feedItem(item service.UserFeedItem) {
+	<div
+		id={ fmt.Sprintf("open-feed-content-btn-%d", item.ID) }
+		class="w-full h-full border border-text/10 rounded-md py-8 px-6 flex-col justify-center gap-8 transition-all hover:-translate-y-1"
+	>
+		<div class="flex items-center gap-3 text-xs">
+			<p>{ item.FeedName }</p>
+			<p>{ item.ItemDate.Time.Format("2006/01/02") }</p>
+		</div>
+		<div>
+			<p class="text-lg font-bold">{ item.Title.String }</p>
+		</div>
+		<div>
+			<p>{ item.Summary.String }</p>
+		</div>
+	</div>
+	@feedItemContentModal(item)
+}
+
+templ feedItemContentModal(item service.UserFeedItem) {
+	<dialog
+		id={ fmt.Sprintf("feed-content-modal-%d", item.ID) }
+		class="relative px-8 py-12 bg-background shadow-md"
+	>
+		<div class="max-w-72 max-h-96 overflow-auto px-5 text-justify">
+			@templ.Raw(html.UnescapeString(item.Content.String))
+		</div>
+		<button id={ fmt.Sprintf("close-feed-content-btn-%d", item.ID) } class="absolute top-1 right-1" type="button">
+			@icon.X()
+		</button>
+	</dialog>
+	@feedModalScript(fmt.Sprint(item.ID))
+}
+
+script feedModalScript(id string) {
+        const feedContentModal = document.getElementById("feed-content-modal-" + id)
+        const openViewFeedModalBtn = document.getElementById("open-feed-content-btn-" + id);
+        const closeViewFeedModalBtn = document.getElementById("close-feed-content-btn-" + id);
+
+        openViewFeedModalBtn.addEventListener('click', () => {
+          feedContentModal.showModal();
+        });
+
+        closeViewFeedModalBtn.addEventListener('click', () => {
+          feedContentModal.close();
+        });
+
+}
+
+func Unsafe(html string) templ.Component {
+	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) (err error) {
+		_, err = io.WriteString(w, html)
+		return
+	})
+}
